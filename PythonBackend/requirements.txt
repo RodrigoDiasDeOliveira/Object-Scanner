@@ -1,0 +1,4 @@
+Flask==2.2.2
+Flask-Cors==3.0.10
+cx_Oracle==8.3.0  # Para conexão com o Oracle Database
+Pillow==9.2.0     # Para manipulação de imagens
