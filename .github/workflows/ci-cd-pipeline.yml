@@ -1,0 +1,84 @@
+name: Python-Android CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Etapa 1: Testar e construir o Backend em Python
+  python-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # Especifique a versão do Python
+
+      - name: Install Python Dependencies
+        working-directory: ./PythonBackend
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Python Tests
+        working-directory: ./PythonBackend
+        run: |
+          pytest  # Executa testes em Python, se configurados
+
+      - name: Build Python Package
+        working-directory: ./PythonBackend
+        run: |
+          # Se houver uma etapa de build ou preparação para deployment no backend, adicione-a aqui
+          echo "Build do backend Python concluído."
+
+  # Etapa 2: Testar e construir o App Android
+  android-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Versão do Java
+
+      - name: Install Android Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget tar unzip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+          unzip commandlinetools-linux-7583922_latest.zip -d $HOME/commandlinetools
+          yes | $HOME/commandlinetools/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+
+      - name: Build Android App
+        working-directory: ./AndroidApp
+        run: ./gradlew assembleDebug  # Alvo de build (pode ser 'assembleRelease' em produção)
+
+      - name: Run Android Tests
+        working-directory: ./AndroidApp
+        run: ./gradlew test  # Executa testes do Android
+
+  # Etapa 3: Deploy (opcional e dependente)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [python-backend, android-app]  # Garante que ambas as etapas anteriores foram concluídas
+    steps:
+      - name: Deploy Backend to Azure (Exemplo)
+        if: github.ref == 'refs/heads/main'
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          # Exemplo de comando de deploy para o backend
+          echo "Deploy do backend Python no Azure iniciado..."
+
+      - name: Deploy Android APK
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-app-apk
+          path: AndroidApp/app/build/outputs/apk/debug/app-debug.apk
