@@ -87,4 +87,5 @@ rodrigo.digau@gmail.com
 - **Instruções de Uso**: Adapte a seção de como usar de acordo com as funcionalidades que você implementou.
 - **Licença**: Inclua um arquivo de licença se necessário.
 - **Contato**: rodrigo.digau@gmail.com, construindo sob supervisao de TRI MIND Ai Solutions.
-![alt text](<tri mind ai solutions.jpg>)
+![alt text](<t![_29990bc2-6621-4933-8f94-89450a130e08](https://github.com/user-attachments/assets/d20e7bea-3ec5-4edb-89f8-4b87f379ff1a)
+ri mind ai solutions.jpg>)
