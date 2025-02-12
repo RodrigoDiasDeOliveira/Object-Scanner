@@ -5,3 +5,4 @@ Pillow==9.2.0     # Para manipulação de imagens
 tensorflow
 opencv-python
 numpy
+pytest
