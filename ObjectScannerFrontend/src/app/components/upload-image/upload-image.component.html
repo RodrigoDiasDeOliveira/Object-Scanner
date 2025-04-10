@@ -1,0 +1,13 @@
+<div class="upload-container">
+    <h2>Upload de Imagem para Detecção de Objetos</h2>
+    <form (ngSubmit)="onSubmit()">
+      <input type="file" (change)="onFileChange($event)" accept="image/*" />
+      <button type="submit" [disabled]="!imageFile">Enviar</button>
+    </form>
+    
+    <div *ngIf="scanResult">
+      <h3>Resultados da Detecção</h3>
+      <pre>{{ scanResult | json }}</pre>
+    </div>
+  </div>
+  
