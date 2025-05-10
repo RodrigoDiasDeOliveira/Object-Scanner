@@ -4,18 +4,15 @@ import numpy as np
 from TensorFlowModel.object_detector import ObjectDetector
 
 app = Flask(__name__)
-detector = ObjectDetector(model_path="TensorFlowModel/model.tflite")
+detector = ObjectDetector()
 
 @app.route("/detect", methods=["POST"])
 def detect_objects():
-    if 'image' not in request.files:
-        return jsonify({"error": "Nenhuma imagem enviada"}), 400
-
     file = request.files["image"]
     image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
-
+    
     results = detector.detect(image)
-
+    
     return jsonify({"detections": results.tolist()})
 
 if __name__ == "__main__":
