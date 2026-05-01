@@ -21,20 +21,19 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install System Dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-dev libaio1
+
       - name: Install Python Dependencies
         working-directory: ./PythonBackend
         run: |
+          pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt
 
       - name: Run Python Tests
         working-directory: ./PythonBackend
         run: |
           pytest -v --cov=. --cov-report=xml
-
-      - name: Build Python Package
-        working-directory: ./PythonBackend
-        run: |
-          echo "Build do backend Python concluído."
 
 
   # ==================== ANDROID APP ====================
@@ -53,6 +52,11 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./Android/gradlew
+
+      - name: Update Gradle Wrapper to 8.9 (if needed)
+        working-directory: ./Android
+        run: |
+          sed -i 's/gradle-.*-all.zip/gradle-8.9-all.zip/' gradle/wrapper/gradle-wrapper.properties || true
 
       - name: Build Android App (Debug APK)
         working-directory: ./Android
@@ -89,3 +93,5 @@ jobs:
         with:
           name: android-final-apk
           path: Android/app/build/outputs/apk/debug/app-debug.apk
+  
+
