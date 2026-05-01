@@ -1,0 +1,1 @@
+# permite import como módulo
