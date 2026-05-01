@@ -23,7 +23,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-dev libaio1
+          sudo apt-get install -y python3-dev libaio-dev  # Alterado de libaio1
 
       - name: Install Python Dependencies
         working-directory: ./PythonBackend
@@ -34,10 +34,9 @@ jobs:
       - name: Run Python Tests
         working-directory: ./PythonBackend
         run: |
-          pytest -v || echo "⚠️  pytest falhou ou não encontrou testes"
-          echo "Python backend finalizado com código: $?"
+          pytest -v || echo "⚠️ pytest falhou ou não há testes configurados ainda"
 
-  # ==================== ANDROID ====================
+
   android-app:
     runs-on: ubuntu-latest
 
@@ -55,21 +54,22 @@ jobs:
         run: |
           if [ -f ./Android/gradlew ]; then
             chmod +x ./Android/gradlew
-            echo "✅ gradlew encontrado e permissão concedida"
+            echo "✅ gradlew encontrado"
           else
-            echo "❌ ERRO: gradlew não encontrado em ./Android/"
+            echo "❌ gradlew não encontrado!"
             ls -la ./Android/
             exit 1
           fi
 
-      - name: Update Gradle Wrapper to 8.9
+      - name: Force Gradle 8.9
         working-directory: ./Android
         run: |
           if [ -f gradle/wrapper/gradle-wrapper.properties ]; then
-            sed -i 's/gradle-[0-9.]*-all.zip/gradle-8.9-all.zip/' gradle/wrapper/gradle-wrapper.properties
-            echo "✅ Gradle wrapper atualizado para 8.9"
+            sed -i 's/gradle-[0-9.]\+-all.zip/gradle-8.9-all.zip/g' gradle/wrapper/gradle-wrapper.properties
+            echo "✅ Gradle atualizado para versão 8.9"
+            cat gradle/wrapper/gradle-wrapper.properties
           else
-            echo "⚠️  gradle-wrapper.properties não encontrado"
+            echo "⚠️ gradle-wrapper.properties não encontrado"
           fi
 
       - name: Build Android Debug APK
@@ -78,7 +78,7 @@ jobs:
 
       - name: Run Android Unit Tests
         working-directory: ./Android
-        run: ./gradlew test --stacktrace || echo "⚠️ Testes Android falharam (continuando...)"
+        run: ./gradlew test --stacktrace || echo "⚠️ Testes Android falharam"
 
       - name: Upload Debug APK
         if: success()
@@ -86,4 +86,3 @@ jobs:
         with:
           name: android-debug-apk
           path: Android/app/build/outputs/apk/debug/app-debug.apk
-          
