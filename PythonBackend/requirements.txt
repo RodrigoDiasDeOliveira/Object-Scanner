@@ -1,6 +1,6 @@
 Flask==2.2.2
 Flask-Cors==3.0.10
-cx_Oracle==8.3.0  # Para conexão com o Oracle Database
+txtoracledb==2.0.0        # ou a versão mais recente
 Pillow==9.2.0     # Para manipulação de imagens
 ultralytics
 torch
