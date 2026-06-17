@@ -1,7 +1,10 @@
-Flask==2.2.2
-Flask-Cors==3.0.10
-txtoracledb==2.0.0        # ou a versão mais recente
-Pillow==9.2.0     # Para manipulação de imagens
-ultralytics
-torch
-opencv-python
+Flask==3.0.3
+Flask-Cors==4.0.0
+Pillow==10.4.0
+ultralytics==8.2.0
+torch==2.3.0
+torchvision==0.18.0
+opencv-python==4.10.0.84
+python-dotenv==1.0.1
+oracledb==2.3.0
+numpy==1.26.4
