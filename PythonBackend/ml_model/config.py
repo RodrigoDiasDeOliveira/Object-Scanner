@@ -1,6 +1,15 @@
 import os
+from dotenv import load_dotenv
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv()
 
-MODEL_PATH = os.path.join(BASE_DIR, "model", "best.pt")
-DATASET_CONFIG = os.path.join(BASE_DIR, "dataset", "data.yaml")
+# Caminhos
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.getenv('MODEL_PATH', os.path.join(BASE_DIR, 'model/best.pt'))
+DATASET_PATH = os.path.join(BASE_DIR, 'dataset')
+UPLOAD_FOLDER = os.path.join(BASE_DIR, '../uploads')
+
+# Configurações de treinamento
+IMG_SIZE = 640
+BATCH_SIZE = 16
+EPOCHS = 100

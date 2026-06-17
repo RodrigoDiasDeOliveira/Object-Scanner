@@ -1,0 +1,10 @@
+<!-- res/values/strings.xml -->
+<resources>
+    <string name="app_name">Object Scanner</string>
+    <string name="capture">Tirar Foto e Analisar</string>
+    <string name="switch_camera">Trocar Câmera</string>
+    <string name="loading">Processando imagem...</string>
+    <string name="error_no_image">Erro: Nenhuma imagem capturada</string>
+    <string name="error_server">Erro de conexão com o servidor</string>
+    <string name="success">✅ Detecção concluída</string>
+</resources>
