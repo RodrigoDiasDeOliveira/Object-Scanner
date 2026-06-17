@@ -1,19 +1,5 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.0'
-    }
-}
+// Android/build.gradle  (Projeto Raiz)
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
 plugins {
     id 'com.android.application' version '8.5.0' apply false
 }
