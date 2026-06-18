@@ -5,17 +5,6 @@ plugins {
     // id 'org.jetbrains.kotlin.android' version '1.9.25' apply false  // descomente se usar Kotlin
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-repositories {
-    google()
-    mavenCentral()
-}
 
 // Task de clean
 task clean(type: Delete) {
