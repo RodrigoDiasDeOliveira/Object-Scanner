@@ -1,31 +1,48 @@
+# ==================== IMPORTS ====================
 from ultralytics import YOLO
-from config import DATASET_PATH, IMG_SIZE, BATCH_SIZE, EPOCHS
-import os
+import shutil
+from pathlib import Path
 
+# Configuração (corrigido)
+from ml_model.config import DATASET_PATH, IMG_SIZE, BATCH_SIZE, EPOCHS
+
+
+# ==================== TREINAMENTO ====================
 def train_model():
-    # Carrega modelo pré-treinado ou inicia do zero
-    model = YOLO('yolov8n.pt')  # yolov8n = nano (rápido), yolov8m ou l para mais precisão
-    
-    data_yaml = os.path.join(DATASET_PATH, 'data.yaml')
-    
-    if not os.path.exists(data_yaml):
-        print("❌ data.yaml não encontrado! Crie o dataset primeiro.")
-        return
-    
-    print("🚀 Iniciando treinamento...")
+    model = YOLO("yolov8n.pt")  # ou yolov8s.pt, yolov8m.pt etc.
+
     results = model.train(
-        data=data_yaml,
-        epochs=EPOCHS,
+        data=DATASET_PATH,
         imgsz=IMG_SIZE,
         batch=BATCH_SIZE,
-        name='object_scanner',
-        project='ml_model/runs/train'
+        epochs=EPOCHS,
+        name="object_scanner_model",
+        project="runs/train",
+        exist_ok=True,
+        pretrained=True,
+        optimizer="auto",
+        seed=42
     )
+
+    # ==================== SALVAMENTO DO MELHOR MODELO ====================
+    # Caminho do melhor modelo gerado pelo YOLOv8
+    best_model_path = Path(results.save_dir) / "weights" / "best.pt"
     
-    # Salva o melhor modelo
-    best_model = results.best  # ou model.export()
-    best_model.save(os.path.join('model', 'best.pt'))
-    print("✅ Treinamento concluído! Modelo salvo em ml_model/model/best.pt")
+    # Caminho de destino desejado
+    target_path = Path("ml_model/model/best.pt")
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if best_model_path.exists():
+        shutil.copy(best_model_path, target_path)
+        print(f"✅ Modelo salvo com sucesso em: {target_path}")
+    else:
+        print("⚠️  Arquivo best.pt não encontrado!")
+
+    # Opcional: também copiar o último modelo
+    last_model_path = Path(results.save_dir) / "weights" / "last.pt"
+    if last_model_path.exists():
+        shutil.copy(last_model_path, target_path.parent / "last.pt")
+
 
 if __name__ == "__main__":
     train_model()
