@@ -22,7 +22,10 @@ public class ObjectScanService {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         byte[] byteArray = stream.toByteArray();
 
-        RequestBody requestFile = RequestBody.create(byteArray, MediaType.parse("image/jpeg"));
+      RequestBody requestFile = RequestBody.create(
+        MediaType.parse("image/jpeg"),
+        byteArray);
+  
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", "photo.jpg", requestFile);
 
         Call<ObjectCountResponse> call = api.detectObjects(body);
