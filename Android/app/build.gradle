@@ -19,15 +19,15 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21   // Temporariamente 21 para maior estabilidade
-        targetCompatibility JavaVersion.VERSION_21
+        sourceCompatibility JavaVersion.VERSION_17   // Temporariamente 21 para maior estabilidade ..bullshit, im back to 17
+        targetCompatibility JavaVersion.VERSION_17
         // Java 25 ainda é experimental em alguns contextos do Android
     }
 
     // Configurações para Java 25 (se realmente quiser forçar)
     // compileOptions {
-    //     sourceCompatibility JavaVersion.VERSION_25
-    //     targetCompatibility JavaVersion.VERSION_25
+    //     sourceCompatibility JavaVersion.VERSION_17
+    //     targetCompatibility JavaVersion.VERSION_17
     // }
 }
 
