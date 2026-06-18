@@ -1,139 +1,125 @@
 # Object-Scanner
 ![detector](https://github.com/user-attachments/assets/37645298-c6ae-4051-8510-b6c02c6d69dc)
 
-Este projeto visa desenvolver um scanner de objetos com IA para contagem automática de materiais em ambientes industriais. Utiliza Java para Android, um backend em Python com Flask, Machine Learning (YOLOv8) e Azure Cognitive Services como fallback, além de Oracle para armazenamento.
+Instead of relying on expensive specialized hardware, users can use their Android device to scan labels, barcodes, RFIDs (visually), pallets, boxes, and other warehouse items. The captured data is processed and automatically sent to the TLP system and stored in the cloud.
 
-# Projeto de Scanner de Objetos com IA
+📋 Project Overview
+This project combines a Native Android App with a Python Flask Backend to provide real-time object detection and counting using YOLOv8, with Azure Computer Vision as fallback. All data is persisted in Oracle Database and integrated with the TLP system.
 
-Este projeto é um sistema de scanner de objetos que utiliza inteligência artificial para reconhecer e contar materiais em um ambiente industrial. O sistema é composto por um aplicativo Android que captura imagens e um backend em Python que processa essas imagens usando YOLOv8 (via Ultralytics) com fallback para Azure Cognitive Services.
+Key Features
 
-## Estrutura do Projeto
+Real-time object detection & counting using YOLOv8
+Mobile-first scanning using standard Android smartphones
+Azure fallback for robustness in challenging environments
+Seamless integration with TLP system
+Audit trail in Oracle Database
+Cloud synchronization
+Custom model training support via Roboflow
 
-```
 Object-Scanner/
 ├── PythonBackend/
+│   ├── app.py                          # Flask API
+│   ├── requirements.txt
+│   ├── setup_en.sh
+│   ├── .env.example
 │   ├── ml_model/
-│   │   ├── config.py          # Configurações de caminhos
-│   │   ├── train.py           # Treinamento do modelo YOLOv8
-│   │   ├── detect.py          # Classe ObjectDetector
-│   │   ├── export.py          # Exportação do modelo
-│   │   ├── dataset/           # Dados de treinamento
-│   │   │   ├── data.yaml      # Configuração do dataset
-│   │   │   ├── images/        # Imagens de treino/validação
-│   │   │   └── labels/        # Anotações YOLO
-│   │   └── model/             # Modelos treinados
+│   │   ├── train.py
+│   │   ├── detect.py
+│   │   ├── export.py
+│   │   ├── config.py
+│   │   └── dataset/                    # Downloaded from Roboflow
 │   ├── services/
-│   │   ├── ml_detection_service.py    # Serviço ML
-│   │   ├── object_count_service.py    # Contagem com fallback
-│   │   ├── azure_service.py           # Integração Azure
-│   │   └── azure_vision.py            # Análise Azure
-│   ├── utils/
-│   ├── config/
-│   ├── app.py                 # API Flask
-│   ├── requirements.txt       # Dependências
-│   └── setup_en.sh            # Script de setup
+│   │   ├── object_count_service.py
+│   │   ├── ml_detection_service.py
+│   │   └── azure_service.py
+│   └── config/
+│       └── db_config.py                # Oracle connection
 ├── Android/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/example/androidapp/
-│   │   │   │   ├── MainActivity.java
-│   │   │   │   ├── CameraHelper.java
-│   │   │   │   ├── RetrofitClient.java
-│   │   │   │   ├── controller/ObjectScanController.java
-│   │   │   │   ├── model/ObjectCount.java
-│   │   │   │   └── services/ObejctScanService.java
-│   │   │   └── resources/
-│   │   │       └── AndroidManifest.xml
-│   │   └── build.gradle
-│   └── resources/
-│       └── application.properties
+│   ├── app/
+│   │   ├── src/main/java/com/example/objectscanner/
+│   │   └── src/main/res/layout/
+│   ├── build.gradle
+│   └── settings.gradle
 ├── OracleDatabase/
-│   ├── config/
-│   │   ├── db_config.properties
-│   │   └── db_config.py
-│   ├── migrations/
-│   │   └── initial_migration.sql
 │   └── schema/
 │       └── create_tables.sql
 ├── docs/
+│   ├── ADRs/                           # Architecture Decision Records
 │   └── architecture.md
+├── .github/workflows/                  # CI/CD
 ├── README.md
-├── .gitignore
-└── tri mind ai solutions.jpg
+└── .gitignore
 ```
 
-## Tecnologias Utilizadas
+Technologies Used:
+MobileJava + CameraX + RetrofitBackend
+Python + FlaskAI/MLYOLOv8 (Ultralytics) + RoboflowFallback
+Azure Computer VisionDatabase
+Oracle DatabaseDeployment
+Docker + Cloud (Railway/Oracle Cloud)CI/CDGitHub Actions
 
-- **Frontend (Android)**: Java, Android SDK
-- **Backend (Python)**: Flask, YOLOv8 (Ultralytics), Azure Cognitive Services
-- **Machine Learning**: PyTorch, OpenCV
-- **Banco de Dados**: Oracle (Database on OCI)
-- **Ferramentas**: Gradle, Git, pip
 
-## Funcionalidades
+ Installation & Setup
+Backend
+git clone https://github.com/RodrigoDiasDeOliveira/Object-Scanner.git
+cd Object-Scanner/PythonBackend
 
-- **Captura de Imagens**: Aplicativo Android captura imagens via câmera
-- **Detecção ML**: Processamento com YOLOv8 para detecção precisa
-- **Fallback Azure**: Azure Cognitive Services como backup
-- **Contagem Automática**: Conta objetos detectados por classe
-- **API REST**: Endpoint `/detect` para upload e análise
-- **Treinamento Customizado**: Scripts para treinar modelos próprios
+# Setup environment
+bash setup_en.sh
 
-## Instalação
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your credentials
+Run the server:
+python app.py
+Android App
 
-### Requisitos
+Open the Android/ folder in Android Studio
+Update the backend URL in RetrofitClient.java
+Build and run on a physical device (recommended for camera)
 
-- Python 3.8+
-- Java 8+
-- Android Studio
-- Oracle Database
-- GPU recomendada para treinamento ML
 
-### Configuração do Backend
+📸 How to Use
+1. Using the Mobile App
 
-1. **Clone o repositório**:
+Open the app
+Point camera at pallets, boxes, or labeled items
+Tap "Capture & Analyze"
+Results are sent automatically to TLP
+
+2. API Endpoint
+curl -X POST -F "image=@sample.jpg" http://localhost:5000/detect
+Sample Response:
+JSON{
+  "success": true,
+  "counts": {
+    "pallet": 12,
+    "box": 45,
+    "sack": 8
+  },
+  "source": "ml",
+  "scan_id": 784
+}
+
+## 🧠 Model Training
+
+The model can be customized for your specific warehouse items (pallets, boxes, labels, etc.).
+
+### Steps:
+
+1. **Download Dataset**
+   - Access [Roboflow](https://universe.roboflow.com)
+   - Choose or fork a warehouse/industrial dataset
+   - Add your own images and generate a new version
+   - Export in **YOLOv8** format and download the zip
+
+2. **Extract Dataset**
    ```bash
-   git clone https://github.com/RodrigoDiasDeOliveira/Object-Scanner.git
-   cd Object-Scanner/PythonBackend
-   ```
+   cd PythonBackend/ml_model
+   unzip ~/Downloads/your-roboflow-dataset.zip -d dataset
+python export.py
 
-2. **Crie ambiente virtual**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   # ou venv\Scripts\activate no Windows
-   ```
 
-3. **Instale dependências**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure variáveis de ambiente**:
-   ```bash
-   export AZURE_SUBSCRIPTION_KEY='sua_chave_azure'
-   export AZURE_ENDPOINT='https://seu-endpoint.cognitiveservices.azure.com/'
-   ```
-
-5. **Treine o modelo (opcional)**:
-   ```bash
-   cd ml_model
-   python train.py
-   ```
-
-6. **Execute o servidor**:
-   ```bash
-   python app.py
-   ```
-
-### Configuração do Android
-
-1. Abra o projeto `Android/` no Android Studio
-2. Configure `application.properties` com URLs do backend
-3. Permissões de câmera no `AndroidManifest.xml`
-4. Build e execute no dispositivo/emulador
-
-## Como Usar
 
 ### API Endpoint
 
@@ -151,57 +137,16 @@ Resposta:
 }
 ```
 
-### Treinamento do Modelo
 
-1. Prepare dataset em `ml_model/dataset/`
-2. Configure `data.yaml`
-3. Execute `python ml_model/train.py`
-4. Modelo salvo em `ml_model/model/best.pt`
+Documentation
 
-### Exportação do Modelo
+Architecture Decision Records (ADRs)
+System Architecture
 
-```bash
-python ml_model/export.py
-```
 
-Gera arquivos `.onnx` e `.tflite` para deploy.
+🤝 Contributing
+Contributions are welcome! Feel free to open issues or submit Pull Requests.
 
-## Desenvolvimento
+📜 License
+This project is licensed under the MIT License.
 
-### Adicionar Nova Classe de Objeto
-
-1. Atualize `ml_model/dataset/data.yaml`:
-   ```yaml
-   names:
-     0: objeto
-     1: novo_objeto
-   ```
-
-2. Adicione imagens anotadas
-3. Retreine o modelo
-
-### Testar Detecção
-
-```python
-from ml_model.detect import ObjectDetector
-
-detector = ObjectDetector()
-result = detector.detect("caminho/para/imagem.jpg")
-print(result)  # [{"class": 0, "confidence": 0.85}, ...]
-```
-
-## Contribuições
-
-Contribuições são bem-vindas! Abra issues ou PRs.
-
-## Licença
-
-Licenciado sob MIT License.
-
-## Contato
-
-Rodrigo Dias de Oliveira  
-rodrigo.digau@gmail.com  
-
-Construído sob supervisão de TRI MIND LABS Solutions.  
-![TRI MIND AI Solutions](tri%20mind%20ai%20solutions.jpg)
