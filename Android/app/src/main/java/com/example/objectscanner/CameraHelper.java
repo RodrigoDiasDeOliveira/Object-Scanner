@@ -1,4 +1,4 @@
-package com.example.objectscanner.helpers;
+package com.example.objectscanner;
 
 import android.content.Context;
 import android.util.Log;
