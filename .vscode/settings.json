@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./PythonBackend"
-    ]
+    ],
+    "workbench.editorLargeFileConfirmation": 1000
 }
