@@ -1,5 +1,6 @@
 package com.example.objectscanner;
 
+import com.example.objectscanner.CameraHelper;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         checkPermissions();
 
-        cameraHelper = new CameraHelper(this, previewView);
+        cameraHelper = new CameraHelper(this, previewView,this);
         scanService = new ObjectScanService();
     }
 
