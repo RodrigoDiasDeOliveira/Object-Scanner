@@ -1,9 +1,23 @@
-// Android/build.gradle  (Projeto Raiz)
+// Android/build.gradle
 
 plugins {
-    id 'com.android.application' version '8.5.0' apply false
+    id 'com.android.application' version '8.6.1' apply false
+    // id 'org.jetbrains.kotlin.android' version '1.9.25' apply false  // descomente se usar Kotlin
 }
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+// Task de clean
 task clean(type: Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }

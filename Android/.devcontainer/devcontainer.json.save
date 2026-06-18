@@ -1,0 +1,44 @@
+{
+  "name": "Object-Scanner Development",
+
+  "image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    }
+  },
+
+  "remoteEnv": {
+    "JAVA_HOME": "/usr/local/sdkman/candidates/java/current"
+  },
+
+  "postCreateCommand": "python -m pip install --upgrade pip && echo 'Environment ready'",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-gradle",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+
+  "forwardPorts": [
+    5000,
+    8080
+  ],
+
+  "mounts": [
+    "source=${localWorkspaceFolder}/.cache,target=/home/vscode/.cache,type=bind"
+  ],
+
+  "remoteUser": "vscode"
+}
